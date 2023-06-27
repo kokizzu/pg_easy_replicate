@@ -26,6 +26,8 @@ Battle tested in production at [Tines](https://www.tines.com/) 🚀
 - [Switchover strategies with minimal downtime](#switchover-strategies-with-minimal-downtime)
   - [Rolling restart strategy](#rolling-restart-strategy)
   - [DNS Failover strategy](#dns-failover-strategy)
+- [FAQ](#faq)
+  - [Adding internal user to pgBouncer `userlist`](#adding-internal-user-to-pgbouncer-userlist)
 - [Contributing](#contributing)
 
 ## Installation
@@ -246,6 +248,12 @@ Next, you can set up a program that watches the `stats` and waits until `switcho
 In this strategy, you have a weighted based DNS system (example [AWS Route53 weighted records](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-values-weighted.html)) where 100% of traffic goes to a primary origin and 0% to a secondary origin. The primary origin here is the DNS host for your source database and secondary origin is the DNS host for your target database. You can set up your application ahead of time to interact with the database using DNS from the weighted group.
 
 Next, you can set up a program that watches the `stats` and waits until `switchover_completed_at` is reporting as `true`. Once that happens it updates the weight in the DNS weighted group where 100% of the requests now go to the new/target database. Note: Keeping a low `ttl` is recommended.
+
+## FAQ
+
+### Adding internal user to pgBouncer `userlist`
+
+`pg_easy_replicate` creates a special user to orchestrate the replication. If you us pgBouncer, you may need to allow `pger_su_h1a4fb` as a user than perform login by adding it to the `userlist`.
 
 ## Contributing
 
